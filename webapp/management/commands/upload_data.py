@@ -1,7 +1,10 @@
 from django.core.management.base import BaseCommand
+from django.conf                 import settings
+from collections                 import Counter
 from argparse                    import FileType
 from datetime                    import datetime
-
+from os.path                     import exists
+from yaml                        import dump, load
 from webapp.models               import FoodReviews
 
 def _to_date(d):
@@ -13,10 +16,12 @@ class Command(BaseCommand):
         parser.add_argument('--limit', type=int, help='to limit no of data upload')
 
     def handle(self, *args, **kwargs):
-        rawfile = kwargs['file_path']
-        limit   = kwargs['limit']
+        rawfile    = kwargs['file_path']
+        limit      = kwargs['limit']
+        index_data = {}
+
         with open(rawfile, encoding='latin-1') as f:
-            _data  = {}
+            _data = {}
             total = 0
             for line in f.readlines():
                 if not line.strip() == '':
@@ -29,7 +34,7 @@ class Command(BaseCommand):
                     _data = dict([(k, v.strip()) for k, v in _data.items()])
 
                     # Inserting data to db from txt file.
-                    FoodReviews.objects.create(
+                    obj = FoodReviews.objects.create(
                         product_id  = _data.get('product/productId'),
                         user_id     = _data.get('review/userId'),
                         name        = _data.get('review/profileName'),
@@ -39,9 +44,18 @@ class Command(BaseCommand):
                         summary     = _data.get('review/summary'),
                         text        = _data.get('review/text'))
 
+                    # Creating inverted index for storing data (field - text)
+                    _text = Counter(obj.text.split(' '))
+                    for k, v in _text.items():
+                        index_data.setdefault(k.lower(), []).append({'pk': obj.pk, 'count': v})
+
                     total += 1
                     print('\r{} recods inserted..'.format(total), end='')
                     _data = {}
 
                     if limit and total >= limit:
                         break
+
+            # writing inverted index to YAML file.
+            with open(settings.INV_INDEX, 'w') as f:
+                dump(index_data, f, default_flow_style=False)
