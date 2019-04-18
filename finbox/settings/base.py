@@ -68,8 +68,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-in'
-TIME_ZONE     = 'UTC'
+LANGUAGE_CODE = 'en-IN'
+TIME_ZONE     = 'Asia/Kolkata'
 USE_I18N      = True
 USE_L10N      = True
 USE_TZ        = False
