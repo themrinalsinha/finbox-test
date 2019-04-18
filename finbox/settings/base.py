@@ -49,7 +49,7 @@ WSGI_APPLICATION = 'finbox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': join(BASE_DIR, 'finbox.db'),
+        'NAME': join(PROJECT_DIR, 'finbox.db'),
     }
 }
 
@@ -72,7 +72,7 @@ LANGUAGE_CODE = 'en-in'
 TIME_ZONE     = 'UTC'
 USE_I18N      = True
 USE_L10N      = True
-USE_TZ        = True
+USE_TZ        = False
 
 # Static files setting
 STATIC_URL    = '/static/'
