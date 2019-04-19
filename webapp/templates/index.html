@@ -1,5 +1,30 @@
 {% extends '_base.html' %}
 
 {% block content %}
-    <h1>Hello there...</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col l12 s12">
+
+            <!-- search bar -->
+            <nav>
+                <div class="nav-wrapper blue">
+                    <form method="POST"> {% csrf_token %}
+                        <div class="input-field">
+                            <input name="search_text" id="search" type="search" required>
+                            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock %}
