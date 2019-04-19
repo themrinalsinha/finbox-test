@@ -17,6 +17,10 @@
         <div class="col l12 s12">
 
             <!-- search bar -->
+            {% if db_missing %}
+                <p>Database or Index files are missing...<br>
+                Please refer: <a href="{{ PROJECT_REPO }}">{{ PROJECT_REPO }}</a></p>
+            {% else %}
             <nav>
                 <div class="nav-wrapper blue">
                     <form method="POST"> {% csrf_token %}
@@ -28,6 +32,7 @@
                     </form>
                 </div>
             </nav>
+            {% endif %}
 
             <!-- data -->
             {% if reviews %}
@@ -61,7 +66,7 @@
                     </tbody>
                 </table>
             {% else %}
-                <p>No records found for <mark>{{ search_string }}</mark></p>
+                {% if search_string %}<p>No records found for <mark>{{ search_string }}</mark></p>{% endif %}
             {% endif %}
 
         </div>
