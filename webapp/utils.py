@@ -1,6 +1,9 @@
+from django.conf import settings
+
 from collections import Counter
 from datetime    import datetime
 from string      import punctuation
+from yaml        import load, Loader
 
 STOP_WORDS = [ "a", "about", "above", "after", "again", "against", "all", "am", "an", "and",
                 "any", "are", "as", "at", "be", "because", "been", "before", "being", "below",
@@ -27,3 +30,47 @@ def _clean_text(text):
     text = text.translate(text.maketrans('', '', punctuation))
     text = [x.strip() for x in text.split(' ') if x and x not in STOP_WORDS]
     return Counter(text)
+
+class FinboxSearch(object):
+    def __init__(self, text):
+        self.text  = text
+        self.index = load(open(settings.INV_INDEX), Loader=Loader)
+
+    def get_value(self, key):
+        return self.index.get(key, [])
+
+    def _text_to_token(self):
+        return [x for x in self.text.split(' ') if x not in STOP_WORDS]
+
+    def _token_data(self):
+        tokens = self._text_to_token()
+        return dict(zip(tokens, [self.get_value(x) for x in tokens]))
+
+    def _calculate_score(self):
+        counter = {}
+        data    = self._token_data()
+        doc_ids = [[a.get('pk') for a in y] for x, y in data.items()]
+
+        intersections = []
+        for i in range(len(doc_ids)):
+            _res = set(doc_ids[i])
+            for j in range(i, len(doc_ids)):
+                if doc_ids[i] == doc_ids[j]:
+                    continue
+                _intersections = _res.intersection(doc_ids[j])
+                if _intersections:
+                    intersections.extend(list(_intersections))
+
+        # Here incrementing counter value by 1 (as 1 is by default)
+        common_docs = dict([(x, y+1) for x, y in Counter(intersections).items()])
+
+        # Now calculate and put score for the documents
+        calc_score  = lambda *x: (sum(x)/len(data))
+        for key, value in data.items():
+            for _val in value:
+                if _val.get('pk') not in common_docs:
+                    _val.setdefault('score', calc_score(1))
+                else:
+                    _val.setdefault('score', calc_score(common_docs.get(_val.get('pk'))))
+
+        return data
