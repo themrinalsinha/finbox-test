@@ -36,6 +36,7 @@
 
             <!-- data -->
             {% if reviews %}
+                {% if search_string %}<p>Showing results for <mark>{{ search_string }}</mark></p>{% endif %}
                 <br>
                 <table class="responsive-table">
                     <thead>
