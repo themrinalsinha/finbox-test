@@ -4,6 +4,7 @@ from collections import Counter
 from datetime    import datetime
 from string      import punctuation
 from yaml        import load, Loader
+from os.path     import exists
 
 STOP_WORDS = [ "a", "about", "above", "after", "again", "against", "all", "am", "an", "and",
                 "any", "are", "as", "at", "be", "because", "been", "before", "being", "below",
@@ -31,7 +32,9 @@ def _clean_text(text):
     text = [x.strip() for x in text.split(' ') if x and x not in STOP_WORDS]
     return Counter(text)
 
-INDEX = load(open(settings.INV_INDEX), Loader=Loader)
+INDEX = {}
+if exists(settings.INV_INDEX):
+    INDEX = load(open(settings.INV_INDEX), Loader=Loader)
 
 class FinboxSearch(object):
     def __init__(self, text):
