@@ -74,3 +74,10 @@ class FinboxSearch(object):
                     _val.setdefault('score', calc_score(common_docs.get(_val.get('pk'))))
 
         return data
+
+    def search(self):
+        data = [x for k, v in self._calculate_score().items() for x in v]
+
+        # sorting based on obtained score.
+        data = sorted(data, key=lambda x: x.get('score'), reverse=True)
+        return data[:settings.K_STOP]

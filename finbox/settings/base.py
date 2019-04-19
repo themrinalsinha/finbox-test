@@ -3,6 +3,7 @@ from os.path import dirname, abspath, join
 BASE_DIR    = dirname(dirname(abspath(__file__)))
 PROJECT_DIR = dirname(abspath(BASE_DIR))
 INV_INDEX   = join(PROJECT_DIR, 'inverted_index.yml')
+K_STOP      = 20 # as in requirement
 
 # Application definition
 INSTALLED_APPS = [
