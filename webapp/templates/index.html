@@ -2,6 +2,16 @@
 
 {% block content %}
 
+<!-- Header -->
+<div class="container">
+    <div class="row">
+        <div class="col l12">
+            <h1 class="center main-header">Tasty Search</h1>
+        </div>
+    </div>
+</div>
+
+<!-- Main container -->
 <div class="container">
     <div class="row">
         <div class="col l12 s12">
@@ -19,12 +29,53 @@
                 </div>
             </nav>
 
+            <!-- data -->
+            {% if reviews %}
+                <br>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Name</th>
+                            <th>Helpfullness</th>
+                            <th>Score</th>
+                            <th>Time</th>
+                            <th>Summary</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        {% for review in reviews %}
+                        <tr>
+                            <td>{{ review.product_id }}</td>
+                            <td>{{ review.name }}<br/><small>{{ review.user_id }}</small></td>
+                            <td>{{ review.helpfulness }}</td>
+                            <td>{{ review.score }}</td>
+                            <td>{{ review.timestamp }}</td>
+                            <td>{{ review.summary }}</td>
+                            <td>{{ review.text }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No records found for <mark>{{ search_string }}</mark></p>
+            {% endif %}
 
         </div>
     </div>
 </div>
 
-
+<!-- Footer -->
+<footer class="page-footer blue">
+    <div class="footer-copyright">
+        <div class="container">
+            © 2019 Finbox (Tasty Search)
+            <a class="grey-text text-lighten-4 right" href="{{ PROJECT_REPO }}" target="_blank">Github <strong>({{ GIT_COMMIT_ID }})</strong></a>
+        </div>
+    </div>
+</footer>
 
 {% endblock %}

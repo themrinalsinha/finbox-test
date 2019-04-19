@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+.main-header {
+    background:linear-gradient(90deg, #fc00ff 0%,#00dbde 100% );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.top-bar a {
+    color: black !important;
+}
+
 .preloader-overlay {
     height: 100%;
     width: 100%;
@@ -15,4 +31,20 @@
     right: 0;
     bottom: 0;
     margin: auto;
+}
+
+.page-footer {
+    padding-top: 0px;
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+}
+
+.page-footer .row {
+    margin-bottom: 0px;
+}
+
+table {
+    margin-bottom: 100px !important;
 }
