@@ -31,13 +31,14 @@ def _clean_text(text):
     text = [x.strip() for x in text.split(' ') if x and x not in STOP_WORDS]
     return Counter(text)
 
+INDEX = load(open(settings.INV_INDEX), Loader=Loader)
+
 class FinboxSearch(object):
     def __init__(self, text):
         self.text  = text
-        self.index = load(open(settings.INV_INDEX), Loader=Loader)
 
     def get_value(self, key):
-        return self.index.get(key, [])
+        return INDEX.get(key, [])
 
     def _text_to_token(self):
         return [x for x in self.text.split(' ') if x not in STOP_WORDS]
